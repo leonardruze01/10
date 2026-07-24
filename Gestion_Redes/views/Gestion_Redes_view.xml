@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Vista Formulario -->
+    <record id="view_Gestion_Redes_form" model="ir.ui.view">
+        <field name="name">Gestion_Redes.form</field>
+        <field name="model">gestion.redes</field>
+        <field name="arch" type="xml">
+            <form string="Gestion de Redes">
+                <sheet>
+                    <field name="imagen" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="Nombre_del_dispositivo" placeholder="Nombre del Dispositivo..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tipo_dispositivo"/>
+                            <field name="Marca"/>
+                            <field name="Modelo"/>
+                            <field name="Numero_Serie"/>
+                        </group>
+                        <group>
+                            <field name="estado_dispositivo"/>
+                            <field name="DNS"/>
+                            <field name="Sistema_Firmware"/>
+                            <field name="Fecha_de_Alta_Dispositivo"/>
+                            <field name="Fecha_de_Mantenimiento"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista Lista (Tree) -->
+    <record id="view_Gestion_Redes_tree" model="ir.ui.view">
+        <field name="name">Gestion_Redes.tree</field>
+        <field name="model">gestion.redes</field>
+        <field name="arch" type="xml">
+            <tree string="Dispositivos de Red">
+                <field name="Nombre_del_dispositivo"/>
+                <field name="tipo_dispositivo"/>
+                <field name="Marca"/>
+                <field name="Modelo"/>
+                <field name="estado_dispositivo"/>
+                <field name="DNS"/>
+                <field name="Fecha_de_Mantenimiento"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Kanban integrada con Imagen -->
+    <record id="view_Gestion_Redes_kanban" model="ir.ui.view">
+        <field name="name">Gestion_Redes.kanban</field>
+        <field name="model">gestion.redes</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="estado_dispositivo">
+                <field name="id"/>
+                <field name="Nombre_del_dispositivo"/>
+                <field name="tipo_dispositivo"/>
+                <field name="Marca"/>
+                <field name="Modelo"/>
+                <field name="estado_dispositivo"/>
+                <field name="imagen"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click oe_kanban_card">
+                            <div class="o_kanban_image">
+                                <t t-if="record.imagen.raw_value">
+                                    <img t-att-src="kanban_image('gestion.redes', 'imagen', record.id.raw_value)"/>
+                                </t>
+                                <t t-if="!record.imagen.raw_value">
+                                    <img t-att-src='_s + "/base/static/src/img/avatar.png"'/>
+                                </t>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong><field name="Nombre_del_dispositivo"/></strong>
+                                <div><field name="tipo_dispositivo"/> - <field name="Marca"/> (<field name="Modelo"/>)</div>
+                                <div><span class="badge"><field name="estado_dispositivo"/></span></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Vista Gráfica por Tipo -->
+    <record id="view_Gestion_Redes_graph_tipo" model="ir.ui.view">
+        <field name="name">Gestion_Redes.graph.tipo</field>
+        <field name="model">gestion.redes</field>
+        <field name="arch" type="xml">
+            <graph string="Dispositivos por Tipo" type="pie">
+                <field name="tipo_dispositivo" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vista Gráfica por Estado -->
+    <record id="view_Gestion_Redes_graph_estado" model="ir.ui.view">
+        <field name="name">Gestion_Redes.graph.estado</field>
+        <field name="model">gestion.redes</field>
+        <field name="arch" type="xml">
+            <graph string="Dispositivos por Estado" type="bar">
+                <field name="estado_dispositivo" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Acción Principal con vistas Kanban, Tree, Form y Graph -->
+    <record model="ir.actions.act_window" id="act_Gestion_Redes">
+        <field name="name">Gestion de Redes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">gestion.redes</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form,graph</field>
+    </record>
+
+    <!-- Declaración de Menús -->
+    <menuitem id="Gestion_Redes_menu" name="Gestion_redes" sequence="10"/>
+    <menuitem id="submenu_Gestion_Redes_menu" name="Gestion_redes" sequence="10" parent="Gestion_Redes_menu"/>
+    <menuitem id="submenu_Gestion_Redes_action" name="Dispositivos" sequence="10" parent="submenu_Gestion_Redes_menu" action="act_Gestion_Redes"/>
+
+</odoo>
